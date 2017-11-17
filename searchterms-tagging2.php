@@ -2,9 +2,9 @@
 /*
 Plugin Name: Recent Search Terms
 Plugin URI: http://www.webspace.technology
-Descriptiom: Recent Search Terms under the post and separate widgets
+Description: Recent Search Terms under the post and separate widgets
 Author: Webspace.technology
-Versio: 1.6
+Version: 1.6
 Author URI: http://www.webspace.technology
 */
 /**
