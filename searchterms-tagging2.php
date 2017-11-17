@@ -4,7 +4,7 @@ Plugin Name: Recent Search Terms
 Plugin URI: http://www.webspace.technology
 Descriptiom: Recent Search Terms under the post and separate widgets
 Author: Webspace.technology
-Versio: 1.0
+Versio: 1.6
 Author URI: http://www.webspace.technology
 */
 /**
@@ -599,6 +599,20 @@ function RCT12_stt2_admin_print_footer(){
 </div>
 </div>
 <?php }
+
+require_once (get_template_directory() . '/plugin-update-checker/plugin-update-checker.php');
+
+$myUpdateChecker = Puc_v4p3_Factory::buildUpdateChecker(
+	'https://github.com/amrikarisma/recent-search-terms',
+	__FILE__,
+	'recent-search-terms'
+);
+
+//Optional: If you're using a private repository, specify the access token like this:
+$myUpdateChecker->setAuthentication('803c80fad921d633c3c0e9e9b754b6dbd3398877');
+
+//Optional: Set the branch that contains the stable release.
+$myUpdateChecker->setBranch('stable-branch-name');
 
 
 
