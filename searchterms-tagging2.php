@@ -612,7 +612,7 @@ $myUpdateChecker = Puc_v4p3_Factory::buildUpdateChecker(
 $myUpdateChecker->setAuthentication('803c80fad921d633c3c0e9e9b754b6dbd3398877');
 
 //Optional: Set the branch that contains the stable release.
-$myUpdateChecker->setBranch('stable-branch-name');
+$myUpdateChecker->setBranch('master');
 
 
 
