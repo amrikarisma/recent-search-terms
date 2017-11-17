@@ -10,6 +10,7 @@ Author URI: http://www.webspace.technology
 /**
 * default values for the plugin settings
 **/
+define('KRS_PLUGIN_DIR', plugin_dir_path( __FILE__) );
 define('RCT12_MAX_SEARCH_TERMS','10');
 define('RCT12_AUTO_ADD','1');
 define('RCT12_AUTO_LINK','0');
@@ -600,19 +601,19 @@ function RCT12_stt2_admin_print_footer(){
 </div>
 <?php }
 
-require_once (get_template_directory() . '/plugin-update-checker/plugin-update-checker.php');
+require_once (KRS_PLUGIN_DIR . '/plugin-update-checker/plugin-update-checker.php');
 
-$myUpdateChecker = Puc_v4p3_Factory::buildUpdateChecker(
+$updateChecker = Puc_v4_Factory::buildUpdateChecker(
 	'https://github.com/amrikarisma/recent-search-terms',
 	__FILE__,
 	'recent-search-terms'
 );
 
 //Optional: If you're using a private repository, specify the access token like this:
-$myUpdateChecker->setAuthentication('803c80fad921d633c3c0e9e9b754b6dbd3398877');
+$updateChecker->setAuthentication('803c80fad921d633c3c0e9e9b754b6dbd3398877');
 
 //Optional: Set the branch that contains the stable release.
-$myUpdateChecker->setBranch('master');
+$updateChecker->setBranch('master');
 
 
 

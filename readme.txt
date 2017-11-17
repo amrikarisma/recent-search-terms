@@ -3,7 +3,7 @@ Contributors: poer
 Tags: seo, widget, links, google, widget, post, sidebar, internal linking, incoming search terms, auto tags
 Requires at least: 2.5
 Tested up to: 3.2.
-Stable tag: 1.5
+Stable tag: 1.6
 
 Multiply blog traffic by strengthening on page SEO, increasing the number of indexed pages, auto convert search terms into post tags, and more.
 
