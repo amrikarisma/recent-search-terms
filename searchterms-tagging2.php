@@ -112,8 +112,11 @@ function RCT12_stt2_admin_notices() {
  * */ 
 function RCT12_stt2_create_admin_menu(){		
 	RCT12_stt2_admin_print_title();
-	if ( trim($_GET['onlist']) == 1 ) 
-		echo '<div id="message" class="updated fade"><p><strong>'.RCT12_ACTIVATED.'</strong></p></div>';
+	if(isset($_GET['onlist'])){
+		if ( trim($_GET['onlist']) == 1 ) {
+			echo '<div id="message" class="updated fade"><p><strong>'.RCT12_ACTIVATED.'</strong></p></div>';
+		}
+	}
 		
 	if ( RCT12_stt2_onlist() ) {
 		RCT12_stt2_admin_print_header();
@@ -424,7 +427,9 @@ function RCT12_stt2_admin_print_admin_page(){
 							<?php 
 								$wo_traffic = RCT12_stt2_db_get_number_of_posts_wo_traffic(); 
 								$total = RCT12_stt2_db_get_number_of_posts();
-								$percentage = intval(( $wo_traffic / $total ) * 100); ?>		
+
+								$percentage = intval(( $wo_traffic / $total ) * 100); 
+								 ?>		
 							<li>Number of posts with no search engine traffic: <?php echo "$wo_traffic of $total ( $percentage% )"; ?></li>
 							<li>Last promoted blog post: <?php RCT12_stt2_the_last_promoted_post(); ?></li>
 							<li>Next scheduled promotion on	<?php echo date('F j, Y, g:i A',wp_next_scheduled('RCT12_stt2_promote_old_post_event_hook')); ?>.</li>
@@ -660,11 +665,12 @@ function RCT12_stt2_db_promote_single_post_wo_traffic( $old_post_ID ){
  **/
 function RCT12_stt2_db_get_number_of_posts_wo_traffic(){
 	$post_count = wp_cache_get( 'stt2_number_of_posts_wo_traffic' );
-	if ( false == $post_count ) {
+	// wp_die($post_count);
+	if ( !isset($post_count) )  {
 		global $wpdb;
 		$sql = "SELECT count(`ID`) FROM $wpdb->posts WHERE `post_status` = 'publish' AND `post_type` = 'post' AND ID NOT IN ( 
 			SELECT post_id FROM ".$wpdb->prefix."stt2_meta );";
-		$post_count = $wpdb->get_var($wpdb->prepare( $sql ));	
+		$post_count = $wpdb->get_var($sql );	
 		wp_cache_set( 'stt2_number_of_posts_wo_traffic', $post_count, 86400 );
 	} 		
 	return $post_count;
@@ -697,13 +703,15 @@ function RCT12_stt2_db_get_last_promoted_post_title( $id ){
  * get the number of posts
  **/
 function RCT12_stt2_db_get_number_of_posts(){
-	$post_count = wp_cache_get( 'stt2_get_number_of_posts' );
-	if ( false == $post_count ) {
+	// wp_die($post_count);
+	global $id;
+	if ( !isset( $post_count ) ) {
 		global $wpdb;
 		$sql = "SELECT count(`ID`) FROM $wpdb->posts WHERE `post_status` = 'publish' AND `post_type` = 'post';";
-		$post_count = $wpdb->get_var($wpdb->prepare( $sql ));	
+		$post_count = $wpdb->get_var( $sql );	
 		wp_cache_set( 'stt2_get_number_of_posts'.$id, $post_count, 3600 );
-	} 				
+	}else
+		$post_count = wp_cache_get( 'stt2_get_number_of_posts'.$id);  				
 	return $post_count;
 }
 /**
@@ -1211,14 +1219,19 @@ function RCT12_stt2_onlist(){
 	$form_1 = 'stt2_reg_form_1';
 	$form_2 = 'stt2_reg_form_2';
 	$RCT12_stt2_list = get_option('onlist_status');
-	if ( trim($_GET['onlist']) == 1 || $_GET['no'] == 1 ) { 			
-		$RCT12_stt2_list = 2; update_option('onlist_status', $RCT12_stt2_list);
-	} 
-	if ( ((trim($_GET['activate']) != '' && trim($_GET['from']) != '') || trim($_GET['activate_again']) != '') && $RCT12_stt2_list != 2 ) { 
-		update_option('RCT12_stt2_name', $_GET['name']);
-		update_option('RCT12_stt2_email', $_GET['from']);
-		$RCT12_stt2_list = 1; update_option('onlist_status', $RCT12_stt2_list);
+	if(isset($_GET['onlist'])) {
+		if ( trim($_GET['onlist']) == 1 || $_GET['no'] == 1 ) { 			
+			$RCT12_stt2_list = 2; update_option('onlist_status', $RCT12_stt2_list);
+		} 
 	}
+	if(isset($_GET['activate'])) {
+		if ( ((trim($_GET['activate']) != '' && trim($_GET['from']) != '') || trim($_GET['activate_again']) != '') && $RCT12_stt2_list != 2 ) { 
+			update_option('RCT12_stt2_name', $_GET['name']);
+			update_option('RCT12_stt2_email', $_GET['from']);
+			$RCT12_stt2_list = 1; update_option('onlist_status', $RCT12_stt2_list);
+		}
+	}
+
 	if ( $RCT12_stt2_list == 0 ) {
 		 RCT12_stt2_register_1($form_1);
 	} else if ( $RCT12_stt2_list == 1 ) {
