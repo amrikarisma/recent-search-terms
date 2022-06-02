@@ -1,9 +1,9 @@
 === Plugin Name ===
-Contributors: poer
+Contributors: Amri Karisma
 Tags: seo, widget, links, google, widget, post, sidebar, internal linking, incoming search terms, auto tags
-Requires at least: 2.5
-Tested up to: 3.2.
-Stable tag: v1.6
+Requires at least: 5.8
+Tested up to: 6.0
+Stable tag: v1.6.1
 
 Multiply blog traffic by strengthening on page SEO, increasing the number of indexed pages, auto convert search terms into post tags, and more.
 

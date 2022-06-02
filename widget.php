@@ -1,8 +1,8 @@
 <?php
 /* 
 Description:  Add popular, recent, popular in category and random search terms widget
-Version: 1.5 (1.01228)
-Author: Purwedi Kurniawan
+Version: 1.6.1
+Author: Amri Karisma
 */
 
 /**
@@ -85,22 +85,8 @@ function popular_terms_control()
 }
 function popular_terms_init()
 {
-  wp_register_sidebar_widget(
-    'widget_popular_terms_1',
-    'Popular Search Terms',
-    'widget_popular_terms',
-    array(              // options
-      'description' => 'Popular Search Terms'
-    )
-  );
-  wp_register_widget_control(
-    'popular_terms_control_1',
-    'Popular Search Terms',
-    'popular_terms_control',
-    array(              // options
-      'description' => 'Popular Search Terms'
-    )
-  );
+  wp_register_sidebar_widget('Popular Search Terms', 'widget_popular_terms');
+  register_widget_control('Popular Search Terms', 'popular_terms_control', 300, 200);
 }
 add_action("plugins_loaded", "popular_terms_init");
 /**
@@ -183,22 +169,8 @@ function recent_terms_control()
 }
 function recent_terms_init()
 {
-  wp_register_sidebar_widget(
-    'widget_popular_terms_1',
-    'Recent Search Terms',
-    'widget_recent_terms',
-    array(              // options
-      'description' => 'Recent Search Terms'
-    )
-  );
-  wp_register_widget_control(
-    'popular_terms_control_1',
-    'Recent Search Terms',
-    'recent_terms_control',
-    array(              // options
-      'description' => 'Recent Search Terms'
-    )
-  );
+  wp_register_sidebar_widget('Recent Search Terms', 'widget_recent_terms');
+  register_widget_control('Recent Search Terms', 'recent_terms_control', 300, 200);
 }
 add_action("plugins_loaded", "recent_terms_init");
 /**
@@ -283,32 +255,18 @@ function popular_terms_cat_control()
 }
 function popular_terms_cat_init()
 {
-  wp_register_sidebar_widget(
-    'widget_popular_terms_cat_1',
-    'Popular Terms in Category',
-    'widget_popular_terms_cat',
-    array(              // options
-      'description' => 'Popular Terms in Category'
-    )
-  );
-  wp_register_widget_control(
-    'popular_terms_cat_control_1',
-    'Popular Terms in Category',
-    'popular_terms_cat_control',
-    array(              // options
-      'description' => 'Popular Terms in Category'
-    )
-  );
+  wp_register_sidebar_widget('Popular Terms in Category', 'widget_popular_terms_cat');
+  register_widget_control('Popular Terms in Category', 'popular_terms_cat_control', 300, 200);
 }
 add_action("plugins_loaded", "popular_terms_cat_init");
 /**
  * ---------- RANDOM TERMS WIDGET ----------
  * Display random search terms in the sidebar
  **/
-function RCT12_widget_random_terms($args)
+function KRS_STG_widget_random_terms($args)
 {
   extract($args);
-  $options = get_option("RCT12_widget_random_terms");
+  $options = get_option("KRS_STG_widget_random_terms");
   if (!is_array($options)) {
     $options = array(
       'title' => 'Random Search Terms',
@@ -324,9 +282,9 @@ function RCT12_widget_random_terms($args)
   echo stt_random_terms_widget($options);
   echo $after_widget;
 }
-function RCT12_random_terms_control()
+function KRS_STG_random_terms_control()
 {
-  $options = get_option("RCT12_widget_random_terms");
+  $options = get_option("KRS_STG_widget_random_terms");
   if (!is_array($options)) {
     $options = array(
       'title' => 'Random Search Terms',
@@ -340,7 +298,7 @@ function RCT12_random_terms_control()
     $options['limit'] = intval($_POST['randomterms-widgetlimit']);
     $options['list'] = $_POST['randomterms-widgetlist'];
     $options['search'] = $_POST['randomterms-widgetsearch'];
-    update_option("RCT12_widget_random_terms", $options);
+    update_option("KRS_STG_widget_random_terms", $options);
   }
 ?>
 
@@ -382,31 +340,17 @@ function RCT12_random_terms_control()
   </p>
 <?php
 }
-function RCT12_random_terms_init()
+function KRS_STG_random_terms_init()
 {
-  wp_register_sidebar_widget(
-    'RCT12_widget_random_terms_1',
-    'Random Search Terms',
-    'RCT12_widget_random_terms',
-    array(              // options
-      'description' => 'Random Search Terms'
-    )
-  );
-  wp_register_widget_control(
-    'RCT12_random_terms_control_1',
-    'Random Search Terms',
-    'RCT12_random_terms_control',
-    array(              // options
-      'description' => 'Random Search Terms'
-    )
-  );
+  wp_register_sidebar_widget('Random Search Terms', 'KRS_STG_widget_random_terms');
+  register_widget_control('Random Search Terms', 'KRS_STG_random_terms_control', 300, 200);
 }
-add_action("plugins_loaded", "RCT12_random_terms_init");
+add_action("plugins_loaded", "KRS_STG_random_terms_init");
 /*--------- MAIN FUNCTION FOR WIDGET ----- */
 /**
  * print the search terms widget
  * */
-function RCT12_stt2_function_prepare_searchterms_widget($searchterms, $list = true, $search = false)
+function KRS_STG_stt2_function_prepare_searchterms_widget($searchterms, $list = true, $search = false)
 {
   global $post;
   $toReturn = ($list) ? '<ul>' : '';
@@ -415,7 +359,7 @@ function RCT12_stt2_function_prepare_searchterms_widget($searchterms, $list = tr
     if (!$search) {
       $permalink = (0 == $term->post_id) ? get_bloginfo('url') : get_permalink($term->post_id);
     } else {
-      $permalink = get_bloginfo('url') . '/search/' . user_trailingslashit(RCT12_stt2_function_sanitize_search_link($term->meta_value));
+      $permalink = get_bloginfo('url') . '/search/' . user_trailingslashit(KRS_STG_stt2_function_sanitize_search_link($term->meta_value));
     }
     $toReturn .= "<a href=\"$permalink\" title=\"$term->meta_value\">$term->meta_value</a>";
     $toReturn .= ($list) ? '</li>' : ', ';
@@ -423,7 +367,7 @@ function RCT12_stt2_function_prepare_searchterms_widget($searchterms, $list = tr
   $toReturn = trim($toReturn, ', ');
   $toReturn .= ($list) ? '</ul>' : '';
   //$toReturn = htmlspecialchars_decode($toReturn);
-  //$toReturn .= RCT12_WATERMARK;
+  //$toReturn .= KRS_STG_WATERMARK;
   return $toReturn;
 }
 /**
@@ -431,9 +375,9 @@ function RCT12_stt2_function_prepare_searchterms_widget($searchterms, $list = tr
  * */
 function stt_popular_terms_widget($options)
 {
-  $searchterms = RCT12_stt2_db_get_popular_terms($options['limit']);
+  $searchterms = KRS_STG_stt2_db_get_popular_terms($options['limit']);
   if (!empty($searchterms)) {
-    $result = RCT12_stt2_function_prepare_searchterms_widget($searchterms, $options['list'], $options['search']);
+    $result = KRS_STG_stt2_function_prepare_searchterms_widget($searchterms, $options['list'], $options['search']);
     return $result;
   } else {
     return false;
@@ -445,9 +389,9 @@ function stt_popular_terms_widget($options)
 function stt_recent_terms_widget($options)
 {
   global $wpdb;
-  $searchterms = RCT12_stt2_db_get_recent_terms($options['limit']);
+  $searchterms = KRS_STG_stt2_db_get_recent_terms($options['limit']);
   if (!empty($searchterms)) {
-    $result = RCT12_stt2_function_prepare_searchterms_widget($searchterms, $options['list'], $options['search']);
+    $result = KRS_STG_stt2_function_prepare_searchterms_widget($searchterms, $options['list'], $options['search']);
     return $result;
   } else {
     return false;
@@ -459,9 +403,9 @@ function stt_recent_terms_widget($options)
 function stt_popular_terms_in_category_widget($options)
 {
   if (is_category()) {
-    $searchterms = RCT12_stt2_db_get_popular_searchterms_in_category($options['limit']);
+    $searchterms = KRS_STG_stt2_db_get_popular_searchterms_in_category($options['limit']);
     if (!empty($searchterms)) {
-      $result = RCT12_stt2_function_prepare_searchterms_widget($searchterms, $options['list'], $options['search']);
+      $result = KRS_STG_stt2_function_prepare_searchterms_widget($searchterms, $options['list'], $options['search']);
       return $result;
     } else {
       return false;
@@ -473,9 +417,9 @@ function stt_popular_terms_in_category_widget($options)
  * */
 function stt_random_terms_widget($options)
 {
-  $searchterms = RCT12_stt2_db_get_random_terms($options['limit']);
+  $searchterms = KRS_STG_stt2_db_get_random_terms($options['limit']);
   if (!empty($searchterms)) {
-    $result = RCT12_stt2_function_prepare_searchterms_widget($searchterms, $options['list'], $options['search']);
+    $result = KRS_STG_stt2_function_prepare_searchterms_widget($searchterms, $options['list'], $options['search']);
     return $result;
   } else {
     return false;

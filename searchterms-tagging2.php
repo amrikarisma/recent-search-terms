@@ -1,43 +1,43 @@
 <?php
 /*
-Plugin Name: Recent Search Terms
-Plugin URI: http://www.webspace.technology
-Description: Recent Search Terms under the post and separate widgets
-Author: Webspace.technology
-Version: 1.6
-Author URI: http://www.webspace.technology
+Plugin Name: Search Terms Grabber
+Plugin URI: https://karismaid.com/search-terms-grabber
+Description: Search Terms Grabber for your WordPress website.
+Author: Amri Karisma
+Version: 1.6.1
+Author URI: https://karismaid.com
 */
 
 /**
  * default values for the plugin settings
  **/
-define('KRS_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('RCT12_MAX_SEARCH_TERMS', '10');
-define('RCT12_AUTO_ADD', '1');
-define('RCT12_AUTO_LINK', '0');
-define('RCT12_SHOW_COUNT', '0');
-define('RCT12_BEFORE_KEYWORD', '<li>');
-define('RCT12_AFTER_KEYWORD', '</li>');
-define('RCT12_BEFORE_LIST', '<ul>');
-define('RCT12_AFTER_LIST', '</ul>');
-define('RCT12_LIST_HEADER', '<h4>Recent search terms:</h4>');
-define('RCT12_AUTO_CLEANUP', '90');
-define('RCT12_AUTO_TAG', '0');
-define('RCT12_PROMOTE_OLD_POST', '0');
-define('RCT12_BADWORDS', 'http:,cache:,site:,utm_source,sex,porn,gamble,xxx,nude,squirt,gay,abortion,attack,bomb,casino,cocaine,die,death,erection,gambling,heroin,marijuana,masturbation,pedophile,penis,poker,pussy,terrorist');
-define('RCT12_ACTIVATED', 'Thank you for registering the plugin. It has been activated.');
-define('RCT12_DB_VERSION', '2');
+define('KRS_STG_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('KRS_STG_MAX_SEARCH_TERMS', '10');
+define('KRS_STG_AUTO_ADD', '1');
+define('KRS_STG_AUTO_LINK', '0');
+define('KRS_STG_SHOW_COUNT', '0');
+define('KRS_STG_BEFORE_KEYWORD', '<li>');
+define('KRS_STG_AFTER_KEYWORD', '</li>');
+define('KRS_STG_BEFORE_LIST', '<ul>');
+define('KRS_STG_AFTER_LIST', '</ul>');
+define('KRS_STG_LIST_HEADER', '<h4>Recent search terms:</h4>');
+define('KRS_STG_AUTO_CLEANUP', '90');
+define('KRS_STG_AUTO_TAG', '0');
+define('KRS_STG_PROMOTE_OLD_POST', '0');
+define('KRS_STG_BADWORDS', 'http:,cache:,site:,utm_source,sex,porn,gamble,xxx,nude,squirt,gay,abortion,attack,bomb,casino,cocaine,die,death,erection,gambling,heroin,marijuana,masturbation,pedophile,penis,poker,pussy,terrorist');
+define('KRS_STG_ACTIVATED', 'Thank you for registering the plugin. It has been activated.');
+define('KRS_STG_DB_VERSION', '2');
 /**
  * plugin action & filter
  **/
-register_activation_hook(__file__, 'RCT12_stt2_admin_activation');
-register_deactivation_hook(__file__, 'RCT12_stt2_admin_deactivation');
-add_action('admin_menu', 'RCT12_stt2_admin_menu_hook');
-add_action('admin_notices', 'RCT12_stt2_admin_notices');
-add_action('wp_head', 'RCT12_stt2_function_wp_head_hook');
-add_action('RCT12_stt2_admin_event_hook', 'RCT12_stt2_admin_scheduled_event');
-add_action('RCT12_stt2_promote_old_post_event_hook', 'RCT12_stt2_promote_old_post_scheduled_event');
-add_filter('the_content', 'RCT12_stt2_admin_content_filter');
+register_activation_hook(__file__, 'KRS_STG_stt2_admin_activation');
+register_deactivation_hook(__file__, 'KRS_STG_stt2_admin_deactivation');
+add_action('admin_menu', 'KRS_STG_stt2_admin_menu_hook');
+add_action('admin_notices', 'KRS_STG_stt2_admin_notices');
+add_action('wp_head', 'KRS_STG_stt2_function_wp_head_hook');
+add_action('KRS_STG_stt2_admin_event_hook', 'KRS_STG_stt2_admin_scheduled_event');
+add_action('KRS_STG_stt2_promote_old_post_event_hook', 'KRS_STG_stt2_promote_old_post_scheduled_event');
+add_filter('the_content', 'KRS_STG_stt2_admin_content_filter');
 /**
  * == ADMIN SECTION ==
  * wordpress admin setting
@@ -45,102 +45,102 @@ add_filter('the_content', 'RCT12_stt2_admin_content_filter');
 /**
  * install the plugin and save the initial values
  * */
-function RCT12_stt2_admin_activation()
+function KRS_STG_stt2_admin_activation()
 {
-	RCT12_stt2_db_create_table();
-	add_option('RCT12_stt2_enabled', '1');
+	KRS_STG_stt2_db_create_table();
+	add_option('KRS_STG_stt2_enabled', '1');
 	$plugin_settings = array(
-		'max' => RCT12_MAX_SEARCH_TERMS, 'auto_add' => RCT12_AUTO_ADD, 'auto_link' => RCT12_AUTO_LINK,
-		'show_count' => RCT12_SHOW_COUNT, 'before_keyword' => RCT12_BEFORE_KEYWORD, 'after_keyword' => RCT12_AFTER_KEYWORD,
-		'before_list' => RCT12_BEFORE_LIST, 'after_list' => RCT12_AFTER_LIST, 'list_header' => RCT12_LIST_HEADER
+		'max' => KRS_STG_MAX_SEARCH_TERMS, 'auto_add' => KRS_STG_AUTO_ADD, 'auto_link' => KRS_STG_AUTO_LINK,
+		'show_count' => KRS_STG_SHOW_COUNT, 'before_keyword' => KRS_STG_BEFORE_KEYWORD, 'after_keyword' => KRS_STG_AFTER_KEYWORD,
+		'before_list' => KRS_STG_BEFORE_LIST, 'after_list' => KRS_STG_AFTER_LIST, 'list_header' => KRS_STG_LIST_HEADER
 	);
 
-	add_option('RCT12_stt2_settings', $plugin_settings);
+	add_option('KRS_STG_stt2_settings', $plugin_settings);
 	add_option('onlist_status', 0);
-	add_option('RCT12_stt2_auto_tag', RCT12_AUTO_TAG);
-	add_option('RCT12_stt2_promote_old_post', RCT12_PROMOTE_OLD_POST);
-	add_option('RCT12_stt2_db_version', RCT12_DB_VERSION);
-	$auto_cleanup = intval(get_option('RCT12_stt2_auto_cleanup'));
-	$auto_cleanup = (0 == $auto_cleanup) ? RCT12_AUTO_CLEANUP : $auto_cleanup;
-	add_option('RCT12_stt2_auto_cleanup', $auto_cleanup);
-	add_option('RCT12_stt2_badwords', RCT12_BADWORDS);
+	add_option('KRS_STG_stt2_auto_tag', KRS_STG_AUTO_TAG);
+	add_option('KRS_STG_stt2_promote_old_post', KRS_STG_PROMOTE_OLD_POST);
+	add_option('KRS_STG_stt2_db_version', KRS_STG_DB_VERSION);
+	$auto_cleanup = intval(get_option('KRS_STG_stt2_auto_cleanup'));
+	$auto_cleanup = (0 == $auto_cleanup) ? KRS_STG_AUTO_CLEANUP : $auto_cleanup;
+	add_option('KRS_STG_stt2_auto_cleanup', $auto_cleanup);
+	add_option('KRS_STG_stt2_badwords', KRS_STG_BADWORDS);
 
-	if (!wp_next_scheduled('RCT12_stt2_admin_event_hook')) {
-		wp_schedule_event(time(), 'daily', 'RCT12_stt2_admin_event_hook');
+	if (!wp_next_scheduled('KRS_STG_stt2_admin_event_hook')) {
+		wp_schedule_event(time(), 'daily', 'KRS_STG_stt2_admin_event_hook');
 	}
 
-	if (!wp_next_scheduled('RCT12_stt2_promote_old_post_event_hook')) {
-		wp_schedule_event(time(), 'twicedaily', 'RCT12_stt2_promote_old_post_event_hook');
+	if (!wp_next_scheduled('KRS_STG_stt2_promote_old_post_event_hook')) {
+		wp_schedule_event(time(), 'twicedaily', 'KRS_STG_stt2_promote_old_post_event_hook');
 	}
 
-	RCT12_stt2_flush_rewrite_rules();
+	KRS_STG_stt2_flush_rewrite_rules();
 }
 /**
  * uninstall the plugin
  **/
-function RCT12_stt2_admin_deactivation()
+function KRS_STG_stt2_admin_deactivation()
 {
-	remove_filter('the_content', 'RCT12_stt2_admin_content_filter');
-	wp_clear_scheduled_hook('RCT12_stt2_admin_event_hook');
-	wp_clear_scheduled_hook('RCT12_stt2_promote_old_post_event_hook');
-	remove_action('RCT12_stt2_admin_event_hook', 'RCT12_stt2_admin_scheduled_event');
-	remove_action('RCT12_stt2_promote_old_post_event_hook', 'RCT12_stt2_promote_old_post_scheduled_event');
+	remove_filter('the_content', 'KRS_STG_stt2_admin_content_filter');
+	wp_clear_scheduled_hook('KRS_STG_stt2_admin_event_hook');
+	wp_clear_scheduled_hook('KRS_STG_stt2_promote_old_post_event_hook');
+	remove_action('KRS_STG_stt2_admin_event_hook', 'KRS_STG_stt2_admin_scheduled_event');
+	remove_action('KRS_STG_stt2_promote_old_post_event_hook', 'KRS_STG_stt2_promote_old_post_scheduled_event');
 }
 /**
  * scheduled event to delete unpopular searchterms
  **/
-function RCT12_stt2_admin_scheduled_event()
+function KRS_STG_stt2_admin_scheduled_event()
 {
-	$days = get_option('RCT12_stt2_auto_cleanup');
+	$days = get_option('KRS_STG_stt2_auto_cleanup');
 	if (0 < $days) {
-		$result = RCT12_stt2_db_cleanup($days);
-		update_option('RCT12_stt2_last_clean_up', date('F j, Y, g:i A') . '; ' . $result . ' search term(s) deleted.');
+		$result = KRS_STG_stt2_db_cleanup($days);
+		update_option('KRS_STG_stt2_last_clean_up', date('F j, Y, g:i A') . '; ' . $result . ' search term(s) deleted.');
 	}
 }
 /**
  * scheduled event to promote old post
  **/
-function RCT12_stt2_promote_old_post_scheduled_event()
+function KRS_STG_stt2_promote_old_post_scheduled_event()
 {
-	$promote = get_option('RCT12_stt2_promote_old_post');
+	$promote = get_option('KRS_STG_stt2_promote_old_post');
 	if (1 == $promote) {
-		RCT12_stt2_promote_old_post();
+		KRS_STG_stt2_promote_old_post();
 	}
 }
 /*
 * display admin notice to upgrade the database when previous format of database exist
 */
-function RCT12_stt2_admin_notices()
+function KRS_STG_stt2_admin_notices()
 {
-	if (get_option('onlist_status') < 2 || '2' !== get_option('RCT12_stt2_db_version')) {
+	if (get_option('onlist_status') < 2 || '2' !== get_option('KRS_STG_stt2_db_version')) {
 		echo "<div class='updated'><p>" . sprintf(__('<a href="%s">Recent search terms</a> plugin need your attention.'), "options-general.php?page=" . basename(plugin_basename(__FILE__))) . "</p></div>";
 	}
 }
 /**
  * framework to handle the admin form
  * */
-function RCT12_stt2_create_admin_menu()
+function KRS_STG_stt2_create_admin_menu()
 {
-	RCT12_stt2_admin_print_title();
+	KRS_STG_stt2_admin_print_title();
 	if (isset($_GET['onlist'])) {
 		if (trim($_GET['onlist']) == 1) {
-			echo '<div id="message" class="updated fade"><p><strong>' . RCT12_ACTIVATED . '</strong></p></div>';
+			echo '<div id="message" class="updated fade"><p><strong>' . KRS_STG_ACTIVATED . '</strong></p></div>';
 		}
 	}
 
-	if (RCT12_stt2_onlist()) {
-		RCT12_stt2_admin_print_header();
+	if (KRS_STG_stt2_onlist()) {
+		KRS_STG_stt2_admin_print_header();
 
-		if ('2' !== get_option('RCT12_stt2_db_version') && !isset($_POST['upgrade_db_structure'])) {
-			RCT12_stt2_admin_upgrade_db();
+		if ('2' !== get_option('KRS_STG_stt2_db_version') && !isset($_POST['upgrade_db_structure'])) {
+			KRS_STG_stt2_admin_upgrade_db();
 		} else {
 
 			/* intercept form submit */
 			if (isset($_POST['submit'])) {
-				RCT12_stt2_admin_update_options();
+				KRS_STG_stt2_admin_update_options();
 			} elseif (isset($_POST['upgrade_db_structure'])) {
-				RCT12_stt2_db_upgrade_db_structure();
-				if ('2' == get_option('RCT12_stt2_db_version')) { ?>
+				KRS_STG_stt2_db_upgrade_db_structure();
+				if ('2' == get_option('KRS_STG_stt2_db_version')) { ?>
 					<div id="message" class="updated fade">
 						<p>Recent search terms database was successfully upgraded for better performance.</p>
 					</div>
@@ -150,29 +150,29 @@ function RCT12_stt2_create_admin_menu()
 					</div>
 	<?php }
 			} elseif (isset($_POST['delete']) || isset($_POST['delete_all'])) {
-				RCT12_stt2_admin_delete_searchterms();
+				KRS_STG_stt2_admin_delete_searchterms();
 			}
 			/* print admin page */
 			if (isset($_GET['stats'])) {
-				RCT12_stt2_admin_print_stats();
+				KRS_STG_stt2_admin_print_stats();
 			} elseif (isset($_GET['stt2_help'])) {
-				RCT12_stt2_admin_help();
+				KRS_STG_stt2_admin_help();
 			} elseif (isset($_GET['donate'])) {
-				RCT12_stt2_admin_donate();
+				KRS_STG_stt2_admin_donate();
 			} elseif (isset($_GET['stt2_no_traffics'])) {
-				RCT12_stt2_admin_print_no_traffic($_GET['stt2_no_traffics']);
+				KRS_STG_stt2_admin_print_no_traffic($_GET['stt2_no_traffics']);
 			} else {
-				RCT12_stt2_admin_print_admin_page();
+				KRS_STG_stt2_admin_print_admin_page();
 			}
 		}
 
-		RCT12_stt2_admin_print_footer();
+		KRS_STG_stt2_admin_print_footer();
 	}
 }
 /**
  * print admin page title
  **/
-function RCT12_stt2_admin_print_title()
+function KRS_STG_stt2_admin_print_title()
 {
 	?>
 	<style type="text/css">
@@ -204,7 +204,7 @@ function RCT12_stt2_admin_print_title()
 /**
  * print admin page header
  **/
-function RCT12_stt2_admin_print_header()
+function KRS_STG_stt2_admin_print_header()
 {
 	$baseurl = "options-general.php?page=" . basename(plugin_basename(__FILE__));
 	?>
@@ -227,15 +227,15 @@ function RCT12_stt2_admin_print_header()
 	/*
 * delete unwanted searchterms from admin menu
 */
-	function RCT12_stt2_admin_delete_searchterms()
+	function KRS_STG_stt2_admin_delete_searchterms()
 	{
 		global $wpdb;
 		if (isset($_POST['delete_terms']) && !empty($_POST['delete_terms'])) {
 			$msg = 'Search terms that contain "' . $_POST['delete_terms'] . '"';
-			$success = RCT12_stt2_db_delete_searchterms($_POST['delete_terms']);
+			$success = KRS_STG_stt2_db_delete_searchterms($_POST['delete_terms']);
 		} elseif (isset($_POST['delete_all'])) {
 			$msg = 'All search terms';
-			$success = RCT12_stt2_db_delete_searchterms('delete_all_terms');
+			$success = KRS_STG_stt2_db_delete_searchterms('delete_all_terms');
 		} else {
 		?>
 			<div id="message" class="updated fade">
@@ -255,18 +255,18 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * display list of search terms, used only in the admin page
 	 * */
-	function RCT12_stt2_admin_print_searchterms($type = 'popular')
+	function KRS_STG_stt2_admin_print_searchterms($type = 'popular')
 	{
 		$count = (isset($_GET['stats'])) ? $_GET['count'] : 15;
 		switch ($type) {
 			case 'popular':
-				$searchterms = RCT12_stt2_db_get_popular_terms($count);
+				$searchterms = KRS_STG_stt2_db_get_popular_terms($count);
 				break;
 			case 'recent':
-				$searchterms = RCT12_stt2_db_get_recent_terms($count);
+				$searchterms = KRS_STG_stt2_db_get_recent_terms($count);
 				break;
 			case 'home':
-				$searchterms = RCT12_stt2_db_get_home_keywords($count);
+				$searchterms = KRS_STG_stt2_db_get_home_keywords($count);
 				break;
 		}
 		if (!empty($searchterms)) {
@@ -287,16 +287,16 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 *  print the admin form
 	 *  */
-	function RCT12_stt2_admin_print_admin_page()
+	function KRS_STG_stt2_admin_print_admin_page()
 	{
-		$options = get_option('RCT12_stt2_settings');
-		$auto_cleanup = intval(get_option('RCT12_stt2_auto_cleanup'));
-		$auto_cleanup = (0 == $auto_cleanup) ? RCT12_AUTO_CLEANUP : $auto_cleanup;
-		$promote_old_post = get_option('RCT12_stt2_promote_old_post');
-		$badwords = get_option('RCT12_stt2_badwords');
+		$options = get_option('KRS_STG_stt2_settings');
+		$auto_cleanup = intval(get_option('KRS_STG_stt2_auto_cleanup'));
+		$auto_cleanup = (0 == $auto_cleanup) ? KRS_STG_AUTO_CLEANUP : $auto_cleanup;
+		$promote_old_post = get_option('KRS_STG_stt2_promote_old_post');
+		$badwords = get_option('KRS_STG_stt2_badwords');
 		if (empty($badwords)) {
-			$badwords = RCT12_BADWORDS;
-			update_option('RCT12_stt2_badwords', trim($badwords, ' ,.'));
+			$badwords = KRS_STG_BADWORDS;
+			update_option('KRS_STG_stt2_badwords', trim($badwords, ' ,.'));
 		};
 	?>
 		<div class="postbox-container" style="width: 74%;">
@@ -318,7 +318,7 @@ function RCT12_stt2_admin_print_header()
 											</label>
 										</td>
 										<td>
-											<input type="checkbox" <?php if (1 == get_option('RCT12_stt2_enabled')) {
+											<input type="checkbox" <?php if (1 == get_option('KRS_STG_stt2_enabled')) {
 																		echo 'checked';
 																	}; ?> value="1" name="enabled" />
 										</td>
@@ -412,10 +412,10 @@ function RCT12_stt2_admin_print_header()
 											</label>
 										</td>
 										<td>
-											<Input type="radio" name="auto_tag" value="1" <?php if (1 == get_option('RCT12_stt2_auto_tag')) {
+											<Input type="radio" name="auto_tag" value="1" <?php if (1 == get_option('KRS_STG_stt2_auto_tag')) {
 																								echo 'checked';
 																							}; ?> /> Yes&nbsp;&nbsp;
-											<Input type="radio" name="auto_tag" value="0" <?php if (0 == get_option('RCT12_stt2_auto_tag')) {
+											<Input type="radio" name="auto_tag" value="0" <?php if (0 == get_option('KRS_STG_stt2_auto_tag')) {
 																								echo 'checked';
 																							}; ?> /> No
 										</td>
@@ -472,14 +472,14 @@ function RCT12_stt2_admin_print_header()
 						<div class="inside">
 							<p>
 							<ul style="margin: 0pt 0pt 14px 30px; list-style-type: circle;">
-								<?php $last_cleanup = get_option('RCT12_stt2_last_clean_up'); ?>
+								<?php $last_cleanup = get_option('KRS_STG_stt2_last_clean_up'); ?>
 								<li>Last database cleaned up: <?php if (!empty($last_cleanup)) {
 																	echo $last_cleanup;
 																} else {
 																	echo 'Never';
 																} ?></li>
 								<li>Next scheduled database clean up on
-									<?php echo date('F j, Y, g:i A', wp_next_scheduled('RCT12_stt2_admin_event_hook')); ?>.</li>
+									<?php echo date('F j, Y, g:i A', wp_next_scheduled('KRS_STG_stt2_admin_event_hook')); ?>.</li>
 							</ul>
 							</p>
 							<p>Once a day, we perform database clean up by removing search terms that are never used again within <?php echo $auto_cleanup; ?> days. It is necessary to prevent an excessive use of server resources, especially if you use shared web hosting.</p>
@@ -496,14 +496,14 @@ function RCT12_stt2_admin_print_header()
 							<p>
 							<ul style="margin: 0pt 0pt 14px 30px; list-style-type: circle;">
 								<?php
-								$wo_traffic = RCT12_stt2_db_get_number_of_posts_wo_traffic();
-								$total = RCT12_stt2_db_get_number_of_posts();
+								$wo_traffic = KRS_STG_stt2_db_get_number_of_posts_wo_traffic();
+								$total = KRS_STG_stt2_db_get_number_of_posts();
 
 								$percentage = intval(($wo_traffic / $total) * 100);
 								?>
 								<li>Number of posts with no search engine traffic: <?php echo "$wo_traffic of $total ( $percentage% )"; ?></li>
-								<li>Last promoted blog post: <?php RCT12_stt2_the_last_promoted_post(); ?></li>
-								<li>Next scheduled promotion on <?php echo date('F j, Y, g:i A', wp_next_scheduled('RCT12_stt2_promote_old_post_event_hook')); ?>.</li>
+								<li>Last promoted blog post: <?php KRS_STG_stt2_the_last_promoted_post(); ?></li>
+								<li>Next scheduled promotion on <?php echo date('F j, Y, g:i A', wp_next_scheduled('KRS_STG_stt2_promote_old_post_event_hook')); ?>.</li>
 							</ul>
 							</p>
 							<p>To ensure that the promoted post get indexed, use free services by<a href="http://www.webspace.technology/free" target="_blank">www.webspace.technology</a> </p>
@@ -544,7 +544,7 @@ function RCT12_stt2_admin_print_header()
 						</h3>
 						<div class="inside">
 							<div class="frame list">
-								<?php echo RCT12_stt2_admin_donate(); ?>
+								<?php echo KRS_STG_stt2_admin_donate(); ?>
 							</div>
 						</div>
 					</div>
@@ -557,7 +557,7 @@ function RCT12_stt2_admin_print_header()
 						</h3>
 						<div class="inside">
 							<div class="frame list">
-								<?php echo RCT12_stt2_admin_print_searchterms('popular'); ?>
+								<?php echo KRS_STG_stt2_admin_print_searchterms('popular'); ?>
 							</div>
 						</div>
 					</div>
@@ -570,7 +570,7 @@ function RCT12_stt2_admin_print_header()
 						</h3>
 						<div class="inside">
 							<div class="frame list">
-								<?php echo RCT12_stt2_admin_print_searchterms('recent'); ?>
+								<?php echo KRS_STG_stt2_admin_print_searchterms('recent'); ?>
 							</div>
 						</div>
 					</div>
@@ -583,7 +583,7 @@ function RCT12_stt2_admin_print_header()
 						</h3>
 						<div class="inside">
 							<div class="frame list">
-								<?php echo RCT12_stt2_admin_print_searchterms('home'); ?>
+								<?php echo KRS_STG_stt2_admin_print_searchterms('home'); ?>
 							</div>
 						</div>
 					</div>
@@ -595,10 +595,10 @@ function RCT12_stt2_admin_print_header()
 	/** 
 	 * filter the content and add the search terms right after the post content ( on single and page only )
 	 * */
-	function RCT12_stt2_admin_content_filter($content)
+	function KRS_STG_stt2_admin_content_filter($content)
 	{
 		if (!is_home()) {
-			$options = get_option('RCT12_stt2_settings');
+			$options = get_option('KRS_STG_stt2_settings');
 			if ($options['auto_add'])
 				$content .= stt_terms_list();
 		}
@@ -607,7 +607,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * update options and save it to db
 	 * */
-	function RCT12_stt2_admin_update_options()
+	function KRS_STG_stt2_admin_update_options()
 	{
 		if (
 			isset($_POST['max']) && isset($_POST['before_keyword']) && isset($_POST['after_keyword']) &&
@@ -624,14 +624,14 @@ function RCT12_stt2_admin_print_header()
 			$options['auto_add'] = intval($_POST['auto_add']);
 			$options['auto_link'] = intval($_POST['auto_link']);
 			$options['show_count'] = intval($_POST['show_count']);
-			update_option('RCT12_stt2_settings', $options);
-			update_option('RCT12_stt2_enabled', $_POST['enabled']);
-			update_option('RCT12_stt2_auto_tag', intval($_POST['auto_tag']));
-			update_option('RCT12_stt2_promote_old_post', intval($_POST['promote_old_post']));
-			update_option('RCT12_stt2_badwords', trim($_POST['badwords'], ' ,.'));
-			RCT12_stt2_db_delete_searchterms($_POST['badwords']);
+			update_option('KRS_STG_stt2_settings', $options);
+			update_option('KRS_STG_stt2_enabled', $_POST['enabled']);
+			update_option('KRS_STG_stt2_auto_tag', intval($_POST['auto_tag']));
+			update_option('KRS_STG_stt2_promote_old_post', intval($_POST['promote_old_post']));
+			update_option('KRS_STG_stt2_badwords', trim($_POST['badwords'], ' ,.'));
+			KRS_STG_stt2_db_delete_searchterms($_POST['badwords']);
 			$autocleanup = (0 == intval($_POST['auto_cleanup'])) ? 90 : intval($_POST['auto_cleanup']);
-			update_option('RCT12_stt2_auto_cleanup', $autocleanup);
+			update_option('KRS_STG_stt2_auto_cleanup', $autocleanup);
 		?>
 			<div id="message" class="updated fade">
 				<p> Options saved.
@@ -645,13 +645,13 @@ function RCT12_stt2_admin_print_header()
 				</p>
 			</div>
 		<?php
-			RCT12_stt2_flush_rewrite_rules();
+			KRS_STG_stt2_flush_rewrite_rules();
 		}
 	}
 	/**
 	 * add the menu into WordPress admin menu
 	 * */
-	function RCT12_stt2_admin_menu_hook()
+	function KRS_STG_stt2_admin_menu_hook()
 	{
 		if (function_exists('add_options_page')) {
 			add_options_page(
@@ -659,14 +659,14 @@ function RCT12_stt2_admin_print_header()
 				'Recent search terms',
 				'manage_options',
 				'searchterms-tagging2.php',
-				'RCT12_stt2_create_admin_menu'
+				'KRS_STG_stt2_create_admin_menu'
 			);
 		}
 	}
 	/**
 	 * print footer
 	 **/
-	function RCT12_stt2_admin_print_footer()
+	function KRS_STG_stt2_admin_print_footer()
 	{
 		?>
 		<div class="postbox-container" style="width: 98%;">
@@ -684,7 +684,7 @@ function RCT12_stt2_admin_print_header()
 	</div>
 <?php }
 
-	require_once(KRS_PLUGIN_DIR . '/plugin-update-checker/plugin-update-checker.php');
+	require_once(KRS_STG_PLUGIN_DIR . '/plugin-update-checker/plugin-update-checker.php');
 
 	$updateChecker = Puc_v4_Factory::buildUpdateChecker(
 		'https://github.com/amrikarisma/recent-search-terms',
@@ -729,7 +729,7 @@ function RCT12_stt2_admin_print_header()
 	 * list blog posts with no search engine traffic
 	 * @return: OBJECT results with ID, post_title properties
 	 **/
-	function RCT12_stt2_db_get_posts_wo_traffic($count = 100)
+	function KRS_STG_stt2_db_get_posts_wo_traffic($count = 100)
 	{
 		$results = wp_cache_get('stt2_posts_wo_traffic_' . $count);
 		if (false == $results) {
@@ -749,7 +749,7 @@ function RCT12_stt2_admin_print_header()
 	 * @params: $old_post_ID, $new_time, $gmt_time
 	 * @return: 1 if succes
 	 **/
-	function RCT12_stt2_db_promote_single_post_wo_traffic($old_post_ID)
+	function KRS_STG_stt2_db_promote_single_post_wo_traffic($old_post_ID)
 	{
 		global $wpdb;
 		$new_time = date('Y-m-d H:i:s');
@@ -763,7 +763,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * get the number of posts with no traffic yet
 	 **/
-	function RCT12_stt2_db_get_number_of_posts_wo_traffic()
+	function KRS_STG_stt2_db_get_number_of_posts_wo_traffic()
 	{
 		$post_count = wp_cache_get('stt2_number_of_posts_wo_traffic');
 		// wp_die($post_count);
@@ -780,7 +780,7 @@ function RCT12_stt2_admin_print_header()
 	 * get single post ID of posts with no traffic yet
 	 * doesn't caching, only run twice a day, and need the most current status
 	 **/
-	function RCT12_stt2_db_get_id_post_wo_traffic()
+	function KRS_STG_stt2_db_get_id_post_wo_traffic()
 	{
 		global $wpdb;
 		$sql = "SELECT `ID` FROM $wpdb->posts WHERE `post_status` = 'publish' AND `post_type` = 'post' AND ID NOT IN ( 
@@ -791,7 +791,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * get last promoted post title
 	 **/
-	function RCT12_stt2_db_get_last_promoted_post_title($id)
+	function KRS_STG_stt2_db_get_last_promoted_post_title($id)
 	{
 		$post_title = wp_cache_get('stt2_last_promoted_post_title_' . $id);
 		if (false == $post_title) {
@@ -805,7 +805,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * get the number of posts
 	 **/
-	function RCT12_stt2_db_get_number_of_posts()
+	function KRS_STG_stt2_db_get_number_of_posts()
 	{
 		// wp_die($post_count);
 		global $id;
@@ -823,7 +823,7 @@ function RCT12_stt2_admin_print_header()
 	 * @param $id: post id
 	 * @return: comma separated text of popular search terms 
 	 **/
-	function RCT12_stt2_db_get_popular_tags($id)
+	function KRS_STG_stt2_db_get_popular_tags($id)
 	{
 		$a_results = wp_cache_get('stt2_get_popular_tags_' . $id);
 		if (false == $a_results) {
@@ -844,7 +844,7 @@ function RCT12_stt2_admin_print_header()
 	 * get popular search terms
 	 * @param $count: max number of search terms
 	 **/
-	function RCT12_stt2_db_get_popular_terms($count)
+	function KRS_STG_stt2_db_get_popular_terms($count)
 	{
 		$result = wp_cache_get('stt2_popular_terms');
 		if (false == $result) {
@@ -858,7 +858,7 @@ function RCT12_stt2_admin_print_header()
 	 * get home keywords
 	 * @param $count: max number of search terms
 	 **/
-	function RCT12_stt2_db_get_home_keywords($count)
+	function KRS_STG_stt2_db_get_home_keywords($count)
 	{
 		$result = wp_cache_get('stt2_home_keywords');
 		if (false == $result) {
@@ -872,7 +872,7 @@ function RCT12_stt2_admin_print_header()
 	 * get list of search terms
 	 * @param $max: max number of search terms
 	 **/
-	function RCT12_stt2_db_get_search_terms($max)
+	function KRS_STG_stt2_db_get_search_terms($max)
 	{
 		$result = wp_cache_get('stt2_search_terms_' . $max);
 		if (false == $result) {
@@ -886,7 +886,7 @@ function RCT12_stt2_admin_print_header()
 	 * get recent search terms
 	 * @param $count: max number of search terms
 	 **/
-	function RCT12_stt2_db_get_recent_terms($count)
+	function KRS_STG_stt2_db_get_recent_terms($count)
 	{
 		$result = wp_cache_get('stt2_recent_terms');
 		if (false == $result) {
@@ -900,7 +900,7 @@ function RCT12_stt2_admin_print_header()
 	 * get random search terms
 	 * @param $count: max number of search terms
 	 **/
-	function RCT12_stt2_db_get_random_terms($count)
+	function KRS_STG_stt2_db_get_random_terms($count)
 	{
 		$result = wp_cache_get('stt2_random_terms');
 		if (false == $result) {
@@ -913,7 +913,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * get the number of searchterms
 	 **/
-	function RCT12_stt2_db_get_number_of_searchterms()
+	function KRS_STG_stt2_db_get_number_of_searchterms()
 	{
 		$result = wp_cache_get('stt2_number_of_searchterms');
 		if (false == $result) {
@@ -928,7 +928,7 @@ function RCT12_stt2_admin_print_header()
 	 * @param $searchterms: comma separated search terms or 'delete_all_terms'
 	 * @output: number of rows effected by the delete query
 	 **/
-	function RCT12_stt2_db_delete_searchterms($searchterms)
+	function KRS_STG_stt2_db_delete_searchterms($searchterms)
 	{
 		global $wpdb;
 		if ('delete_all_terms' !== $searchterms) {
@@ -947,7 +947,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * clean the database in daily basis
 	 **/
-	function RCT12_stt2_db_cleanup($days)
+	function KRS_STG_stt2_db_cleanup($days)
 	{
 		global $wpdb;
 		$result = $wpdb->query('DELETE FROM ' . $wpdb->prefix . 'stt2_meta WHERE (meta_count < 10) AND (date(last_modified) < date(now()-interval ' . $days . ' day));');
@@ -957,7 +957,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * create stt2 database; UTF-8 version
 	 * */
-	function RCT12_stt2_db_create_table()
+	function KRS_STG_stt2_db_create_table()
 	{
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'stt2_meta';
@@ -975,13 +975,13 @@ function RCT12_stt2_admin_print_header()
 			DEFAULT COLLATE utf8_general_ci;";
 			require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 			dbDelta($sql);
-			update_option('RCT12_stt2_db_version', '2');
+			update_option('KRS_STG_stt2_db_version', '2');
 		}
 	}
 	/**
 	 * update stt2 database into version 2; UTF-8 with additional UNIQUE column
 	 **/
-	function RCT12_stt2_db_upgrade_db_structure()
+	function KRS_STG_stt2_db_upgrade_db_structure()
 	{
 		global $wpdb;
 		$sql = "CREATE TABLE `" . $wpdb->prefix . "stt2_meta_tmp` (
@@ -1006,12 +1006,12 @@ function RCT12_stt2_admin_print_header()
 		`" . $wpdb->prefix . "stt2_meta_tmp` TO `" . $wpdb->prefix . "stt2_meta`;";
 		$return = $wpdb->query($sql);
 
-		update_option('RCT12_stt2_db_version', '2');
+		update_option('KRS_STG_stt2_db_version', '2');
 	}
 	/**
 	 * save search terms into database
 	 **/
-	function RCT12_stt2_db_save_searchterms($meta_value)
+	function KRS_STG_stt2_db_save_searchterms($meta_value)
 	{
 		if (strlen($meta_value) > 3) {
 			if (is_home()) {
@@ -1030,7 +1030,7 @@ function RCT12_stt2_admin_print_header()
 	 * get popular search terms in category
 	 * @author: pile ( http://pile.web.id )
 	 **/
-	function RCT12_stt2_db_get_popular_searchterms_in_category($count)
+	function KRS_STG_stt2_db_get_popular_searchterms_in_category($count)
 	{
 		$results = wp_cache_get('stt2_popular_searchterms_in_category_' . $count);
 		if (false == $results) {
@@ -1065,10 +1065,10 @@ function RCT12_stt2_admin_print_header()
 	function stt_popular_terms_in_category($count = 10)
 	{
 		if (is_category()) {
-			$options = get_option('RCT12_stt2_settings');
-			$searchterms = RCT12_stt2_db_get_popular_searchterms_in_category($count);
+			$options = get_option('KRS_STG_stt2_settings');
+			$searchterms = KRS_STG_stt2_db_get_popular_searchterms_in_category($count);
 			if (!empty($searchterms)) {
-				$result = RCT12_stt2_function_prepare_searchterms($searchterms, $options, true);
+				$result = KRS_STG_stt2_function_prepare_searchterms($searchterms, $options, true);
 				return $result;
 			} else {
 				return false;
@@ -1078,13 +1078,13 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * save popular search terms as tags in monthly basis
 	 **/
-	function RCT12_stt2_function_save_tags()
+	function KRS_STG_stt2_function_save_tags()
 	{
-		if ('1' == get_option('RCT12_stt2_auto_tag') && !empty($post->ID)) {
+		if ('1' == get_option('KRS_STG_stt2_auto_tag') && !empty($post->ID)) {
 			$day_diff = ceil((strtotime(date('F j, Y')) - strtotime(get_post_meta($id, 'stt2_update_tags', true)) + 1) / (60 * 60 * 24));
 			if (30 < $day_diff) {
 				global $post;
-				$tags = RCT12_stt2_db_get_popular_tags($post->ID);
+				$tags = KRS_STG_stt2_db_get_popular_tags($post->ID);
 				wp_set_post_tags($post->ID, $tags, true);
 				update_post_meta($post->ID, 'stt2_update_tags', date('F j, Y'));
 			}
@@ -1093,20 +1093,20 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * hooked to wp-head()
 	 * */
-	function RCT12_stt2_function_wp_head_hook()
+	function KRS_STG_stt2_function_wp_head_hook()
 	{
 
-		if (1 == intval(get_option('RCT12_stt2_enabled'))) {
-			$referer = RCT12_stt2_function_get_referer();
+		if (1 == intval(get_option('KRS_STG_stt2_enabled'))) {
+			$referer = KRS_STG_stt2_function_get_referer();
 			if (!$referer) return false;
-			$delimiter = RCT12_stt2_function_get_delimiter($referer);
+			$delimiter = KRS_STG_stt2_function_get_delimiter($referer);
 			if ($delimiter) {
-				$term = RCT12_stt2_function_get_terms($delimiter);
-				if (!RCT12_stt2_is_contain_bad_words($term)) {
-					RCT12_stt2_db_save_searchterms($term);
+				$term = KRS_STG_stt2_function_get_terms($delimiter);
+				if (!KRS_STG_stt2_is_contain_bad_words($term)) {
+					KRS_STG_stt2_db_save_searchterms($term);
 				}
 			}
-			RCT12_stt2_function_save_tags();
+			KRS_STG_stt2_function_save_tags();
 		}
 	}
 	/**
@@ -1114,10 +1114,10 @@ function RCT12_stt2_admin_print_header()
 	 * */
 	function stt_terms_list()
 	{
-		$options = get_option('RCT12_stt2_settings');
-		$searchterms = RCT12_stt2_db_get_search_terms($options['max']);
+		$options = get_option('KRS_STG_stt2_settings');
+		$searchterms = KRS_STG_stt2_db_get_search_terms($options['max']);
 		if (!empty($searchterms)) {
-			$result = RCT12_stt2_function_prepare_searchterms($searchterms, $options);
+			$result = KRS_STG_stt2_function_prepare_searchterms($searchterms, $options);
 			return $result;
 		} else {
 			return false;
@@ -1126,7 +1126,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * strip the slash from each search terms
 	 * */
-	function RCT12_stt2_function_stripslashes_options($options)
+	function KRS_STG_stt2_function_stripslashes_options($options)
 	{
 		foreach ($options as $i => $row) {
 			$row = stripslashes($row);
@@ -1137,10 +1137,10 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * common function to print the search terms
 	 * */
-	function RCT12_stt2_function_prepare_searchterms($searchterms, $options, $popular = false)
+	function KRS_STG_stt2_function_prepare_searchterms($searchterms, $options, $popular = false)
 	{
 		global $post;
-		$options = RCT12_stt2_function_stripslashes_options($options);
+		$options = KRS_STG_stt2_function_stripslashes_options($options);
 		$toReturn .= ($popular == false) ? $options['list_header'] . $options['before_list'] : $options['before_list'];
 		foreach ($searchterms as $term) {
 			if (0 == $options['auto_link']) {
@@ -1150,7 +1150,7 @@ function RCT12_stt2_admin_print_header()
 					if (1 == $options['auto_link']) {
 						$permalink = get_permalink($post->ID);
 					} elseif (2 == $options['auto_link']) {
-						$permalink = get_bloginfo('url') . '/search/' . user_trailingslashit(RCT12_stt2_function_sanitize_search_link($term->meta_value));
+						$permalink = get_bloginfo('url') . '/search/' . user_trailingslashit(KRS_STG_stt2_function_sanitize_search_link($term->meta_value));
 					}
 				} else {
 					$permalink = (0 == $term->post_id) ? get_bloginfo('url') : get_permalink($term->post_id);
@@ -1170,10 +1170,10 @@ function RCT12_stt2_admin_print_header()
 	 * */
 	function stt_popular_terms($count = 10)
 	{
-		$options = get_option('RCT12_stt2_settings');
-		$searchterms = RCT12_stt2_db_get_popular_terms($count);
+		$options = get_option('KRS_STG_stt2_settings');
+		$searchterms = KRS_STG_stt2_db_get_popular_terms($count);
 		if (!empty($searchterms)) {
-			$result = RCT12_stt2_function_prepare_searchterms($searchterms, $options, true);
+			$result = KRS_STG_stt2_function_prepare_searchterms($searchterms, $options, true);
 			return $result;
 		} else {
 			return false;
@@ -1185,10 +1185,10 @@ function RCT12_stt2_admin_print_header()
 	 * */
 	function stt_recent_terms($count = 10)
 	{
-		$options = get_option('RCT12_stt2_settings');
-		$searchterms = RCT12_stt2_db_get_recent_terms($count);
+		$options = get_option('KRS_STG_stt2_settings');
+		$searchterms = KRS_STG_stt2_db_get_recent_terms($count);
 		if (!empty($searchterms)) {
-			$result = RCT12_stt2_function_prepare_searchterms($searchterms, $options, true);
+			$result = KRS_STG_stt2_function_prepare_searchterms($searchterms, $options, true);
 			return $result;
 		} else {
 			return false;
@@ -1200,10 +1200,10 @@ function RCT12_stt2_admin_print_header()
 	 * */
 	function stt_random_terms($count = 10)
 	{
-		$options = get_option('RCT12_stt2_settings');
-		$searchterms = RCT12_stt2_db_get_random_terms($count);
+		$options = get_option('KRS_STG_stt2_settings');
+		$searchterms = KRS_STG_stt2_db_get_random_terms($count);
 		if (!empty($searchterms)) {
-			$result = RCT12_stt2_function_prepare_searchterms($searchterms, $options, true);
+			$result = KRS_STG_stt2_function_prepare_searchterms($searchterms, $options, true);
 			return $result;
 		} else {
 			return false;
@@ -1213,7 +1213,7 @@ function RCT12_stt2_admin_print_header()
 	 * get search delimiter for each search engine
 	 * base on the original searchterms tagging plugin
 	 * */
-	function RCT12_stt2_function_get_delimiter($ref)
+	function KRS_STG_stt2_function_get_delimiter($ref)
 	{
 		$search_engines = array(
 			'google.com' => 'q',
@@ -1272,7 +1272,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * retrieve the search terms from search engine query
 	 * */
-	function RCT12_stt2_function_get_terms($d)
+	function KRS_STG_stt2_function_get_terms($d)
 	{
 		$terms       = null;
 		$query_array = array();
@@ -1290,7 +1290,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * get the referer
 	 * */
-	function RCT12_stt2_function_get_referer()
+	function KRS_STG_stt2_function_get_referer()
 	{
 		if (!isset($_SERVER['HTTP_REFERER']) || ($_SERVER['HTTP_REFERER'] == '')) return false;
 		$referer_info = parse_url($_SERVER['HTTP_REFERER']);
@@ -1304,7 +1304,7 @@ function RCT12_stt2_admin_print_header()
 	 * @param $title: search engine terms
 	 * @output: search terms in form of web safe url slug
 	 **/
-	function RCT12_stt2_function_sanitize_search_link($title)
+	function KRS_STG_stt2_function_sanitize_search_link($title)
 	{
 		$title = strip_tags($title);
 		// Preserve escaped octets.
@@ -1331,10 +1331,10 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * check whether the search term contain forbidden word
 	 **/
-	function RCT12_stt2_is_contain_bad_words($term)
+	function KRS_STG_stt2_is_contain_bad_words($term)
 	{
-		$option = get_option('RCT12_stt2_badwords');
-		$option = (empty($option)) ? RCT12_BADWORDS : $option;
+		$option = get_option('KRS_STG_stt2_badwords');
+		$option = (empty($option)) ? KRS_STG_BADWORDS : $option;
 		$badwords = explode(',', $option);
 		$term = str_ireplace($badwords, '***', $term);
 		if (false === strpos($term, '***'))
@@ -1348,40 +1348,40 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * check onlist status
 	 */
-	function RCT12_stt2_onlist()
+	function KRS_STG_stt2_onlist()
 	{
 		$form_1 = 'stt2_reg_form_1';
 		$form_2 = 'stt2_reg_form_2';
-		$RCT12_stt2_list = get_option('onlist_status');
+		$KRS_STG_stt2_list = get_option('onlist_status');
 		if (isset($_GET['onlist'])) {
 			if (trim($_GET['onlist']) == 1 || $_GET['no'] == 1) {
-				$RCT12_stt2_list = 2;
-				update_option('onlist_status', $RCT12_stt2_list);
+				$KRS_STG_stt2_list = 2;
+				update_option('onlist_status', $KRS_STG_stt2_list);
 			}
 		}
 		if (isset($_GET['activate'])) {
-			if (((trim($_GET['activate']) != '' && trim($_GET['from']) != '') || trim($_GET['activate_again']) != '') && $RCT12_stt2_list != 2) {
-				update_option('RCT12_stt2_name', $_GET['name']);
-				update_option('RCT12_stt2_email', $_GET['from']);
-				$RCT12_stt2_list = 1;
-				update_option('onlist_status', $RCT12_stt2_list);
+			if (((trim($_GET['activate']) != '' && trim($_GET['from']) != '') || trim($_GET['activate_again']) != '') && $KRS_STG_stt2_list != 2) {
+				update_option('KRS_STG_stt2_name', $_GET['name']);
+				update_option('KRS_STG_stt2_email', $_GET['from']);
+				$KRS_STG_stt2_list = 1;
+				update_option('onlist_status', $KRS_STG_stt2_list);
 			}
 		}
 
-		if ($RCT12_stt2_list == 0) {
-			RCT12_stt2_register_1($form_1);
-		} else if ($RCT12_stt2_list == 1) {
-			$name  = get_option('RCT12_stt2_name');
-			$email = get_option('RCT12_stt2_email');
-			RCT12_stt2_register_2($form_2, $name, $email);
-		} else if ($RCT12_stt2_list == 2) {
+		if ($KRS_STG_stt2_list == 0) {
+			KRS_STG_stt2_register_1($form_1);
+		} else if ($KRS_STG_stt2_list == 1) {
+			$name  = get_option('KRS_STG_stt2_name');
+			$email = get_option('KRS_STG_stt2_email');
+			KRS_STG_stt2_register_2($form_2, $name, $email);
+		} else if ($KRS_STG_stt2_list == 2) {
 			return true;
 		}
 	}
 	/**
 	 * Plugin registration form
 	 */
-	function RCT12_stt2_registration_form($form_name, $submit_btn_txt = 'Register', $name, $email, $hide = 0, $activate_again = '')
+	function KRS_STG_stt2_registration_form($form_name, $submit_btn_txt = 'Register', $name, $email, $hide = 0, $activate_again = '')
 	{
 		$wp_url = get_bloginfo('wpurl');
 		$wp_url = (strpos($wp_url, 'http://') === false) ? get_bloginfo('siteurl') : $wp_url;
@@ -1405,7 +1405,7 @@ function RCT12_stt2_admin_print_header()
 				return n;
 			}
 
-			function RCT12_stt2_validate_form_0() {
+			function KRS_STG_stt2_validate_form_0() {
 				var name = document.<?php echo $form_name; ?>.name;
 				var email = document.<?php echo $form_name; ?>.from;
 				var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
@@ -1425,7 +1425,7 @@ function RCT12_stt2_admin_print_header()
 		</script>
 	<?php } ?>
 	<table align="<?php echo $align_tbl; ?>">
-		<form name="<?php echo $form_name; ?>" method="post" action="http://www.aweber.com/scripts/addlead.pl" <?php if ($activate_again != 1) {; ?>onsubmit="return RCT12_stt2_validate_form_0()" <?php } ?>>
+		<form name="<?php echo $form_name; ?>" method="post" action="http://www.aweber.com/scripts/addlead.pl" <?php if ($activate_again != 1) {; ?>onsubmit="return KRS_STG_stt2_validate_form_0()" <?php } ?>>
 			<input type="hidden" name="meta_web_form_id" value="94341858a2" />
 			<input type="hidden" name="listname" value="wp-stt2" />
 			<input type="hidden" name="redirect" value="<?php echo $thankyou_url; ?>">
@@ -1460,7 +1460,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * Register Plugin - Step 2
 	 */
-	function RCT12_stt2_register_2($form_name = 'frm2', $name, $email)
+	function KRS_STG_stt2_register_2($form_name = 'frm2', $name, $email)
 	{
 		$msg = 'You have not clicked on the confirmation link yet. A confirmation email has been sent to you again. Please check your email and click on the confirmation link to register the plugin.';
 		if (trim($_GET['activate_again']) != '' && $msg != '') {
@@ -1503,7 +1503,7 @@ function RCT12_stt2_admin_print_header()
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td><?php RCT12_stt2_registration_form($form_name . '_0', 'Verify and Activate', $name, $email, $hide = 1, $activate_again = 1); ?></td>
+				<td><?php KRS_STG_stt2_registration_form($form_name . '_0', 'Verify and Activate', $name, $email, $hide = 1, $activate_again = 1); ?></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
@@ -1529,7 +1529,7 @@ function RCT12_stt2_admin_print_header()
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td><?php RCT12_stt2_registration_form($form_name, 'Register Again', $name, $email, $hide = 0, $activate_again = 2); ?></td>
+				<td><?php KRS_STG_stt2_registration_form($form_name, 'Register Again', $name, $email, $hide = 0, $activate_again = 2); ?></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
@@ -1561,7 +1561,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * Register Plugin - Step 1
 	 */
-	function RCT12_stt2_register_1($form_name = 'frm1')
+	function KRS_STG_stt2_register_1($form_name = 'frm1')
 	{
 		global $current_user;
 		get_currentuserinfo();
@@ -1588,7 +1588,7 @@ function RCT12_stt2_admin_print_header()
 				<td>&nbsp;</td>
 			</tr>
 			<tr>
-				<td align="center"><?php RCT12_stt2_registration_form($form_name, 'Register', $name, $email); ?></td>
+				<td align="center"><?php KRS_STG_stt2_registration_form($form_name, 'Register', $name, $email); ?></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
@@ -1610,7 +1610,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * print posts with no traffics
 	 **/
-	function RCT12_stt2_admin_print_no_traffic($url = 0)
+	function KRS_STG_stt2_admin_print_no_traffic($url = 0)
 	{
 ?>
 	<div class="postbox-container" style="width: 98%;">
@@ -1624,7 +1624,7 @@ function RCT12_stt2_admin_print_header()
 					</h3>
 					<div class="inside">
 						<div class="frame list">
-							<?php echo RCT12_stt2_admin_print_list_of_no_traffic($url); ?>
+							<?php echo KRS_STG_stt2_admin_print_list_of_no_traffic($url); ?>
 						</div>
 					</div>
 				</div>
@@ -1636,7 +1636,7 @@ function RCT12_stt2_admin_print_header()
 	/**
 	 * print popular and recent search terms full stats
 	 **/
-	function RCT12_stt2_admin_print_stats()
+	function KRS_STG_stt2_admin_print_stats()
 	{
 ?>
 	<div class="postbox-container" style="width: 48%;">
@@ -1650,7 +1650,7 @@ function RCT12_stt2_admin_print_header()
 					</h3>
 					<div class="inside">
 						<div class="frame list">
-							<?php echo RCT12_stt2_admin_print_searchterms('popular'); ?>
+							<?php echo KRS_STG_stt2_admin_print_searchterms('popular'); ?>
 						</div>
 					</div>
 				</div>
@@ -1668,7 +1668,7 @@ function RCT12_stt2_admin_print_header()
 					</h3>
 					<div class="inside">
 						<div class="frame list">
-							<?php echo RCT12_stt2_admin_print_searchterms('recent'); ?>
+							<?php echo KRS_STG_stt2_admin_print_searchterms('recent'); ?>
 						</div>
 					</div>
 				</div>
@@ -1679,7 +1679,7 @@ function RCT12_stt2_admin_print_header()
 		/**
 		 * help page
 		 **/
-		function RCT12_stt2_admin_help()
+		function KRS_STG_stt2_admin_help()
 		{
 			?>
 	<div class="postbox-container" style="width: 98%;">
@@ -1786,7 +1786,7 @@ function RCT12_stt2_admin_print_header()
 		/**
 		 * upgrade database to support international character or v2
 		 **/
-		function RCT12_stt2_admin_upgrade_db()
+		function KRS_STG_stt2_admin_upgrade_db()
 		{
 ?>
 	<div class="postbox-container" style="width: 98%;">
@@ -1816,7 +1816,7 @@ function RCT12_stt2_admin_print_header()
 		/**
 		 * donation tab
 		 **/
-		function RCT12_stt2_admin_donate()
+		function KRS_STG_stt2_admin_donate()
 		{
 ?>
 	<div style="text-align:center;">
@@ -1872,22 +1872,22 @@ function RCT12_stt2_admin_print_header()
 		/**
 		 * get 1 random post publish over 30 days ago but still doesn't have traffic yet, then update the publish date time into now, make it the most recent post.
 		 **/
-		function RCT12_stt2_promote_old_post()
+		function KRS_STG_stt2_promote_old_post()
 		{
-			$old_post_ID = RCT12_stt2_db_get_id_post_wo_traffic();
+			$old_post_ID = KRS_STG_stt2_db_get_id_post_wo_traffic();
 			if (!empty($old_post_ID)) {
-				RCT12_stt2_db_promote_single_post_wo_traffic($old_post_ID);
-				update_option('RCT12_stt2_last_promoted_id', $old_post_ID);
+				KRS_STG_stt2_db_promote_single_post_wo_traffic($old_post_ID);
+				update_option('KRS_STG_stt2_last_promoted_id', $old_post_ID);
 			}
 		}
 		/**
 		 * diplay last promoted post in admin area
 		 **/
-		function RCT12_stt2_the_last_promoted_post()
+		function KRS_STG_stt2_the_last_promoted_post()
 		{
-			$last_promoted_ID = get_option('RCT12_stt2_last_promoted_id');
+			$last_promoted_ID = get_option('KRS_STG_stt2_last_promoted_id');
 			if ($last_promoted_ID) {
-				$post_title = RCT12_stt2_db_get_last_promoted_post_title($last_promoted_ID);
+				$post_title = KRS_STG_stt2_db_get_last_promoted_post_title($last_promoted_ID);
 				echo '<a href="' . get_permalink($last_promoted_ID) . '" target="_blank">' . $post_title . '</a>';
 			} else {
 				echo 'None';
@@ -1896,9 +1896,9 @@ function RCT12_stt2_admin_print_header()
 		/**
 		 * display list of posts with no search engines traffic
 		 * */
-		function RCT12_stt2_admin_print_list_of_no_traffic($url = 0)
+		function KRS_STG_stt2_admin_print_list_of_no_traffic($url = 0)
 		{
-			$searchterms = RCT12_stt2_db_get_posts_wo_traffic();
+			$searchterms = KRS_STG_stt2_db_get_posts_wo_traffic();
 
 			if (!empty($searchterms)) {
 				if ($url == 0) {
@@ -1961,20 +1961,20 @@ function RCT12_stt2_admin_print_header()
 		/**
 		 * == SEARCH QUERY SECTION ==
 		 **/
-		add_action('generate_rewrite_rules', 'RCT12_stt2_add_rewrite_rules');
-		function RCT12_stt2_add_rewrite_rules($wp_rewrite)
+		add_action('generate_rewrite_rules', 'KRS_STG_stt2_add_rewrite_rules');
+		function KRS_STG_stt2_add_rewrite_rules($wp_rewrite)
 		{
 			$new_rules = array('^search/(.+)\$' => 'index.php?s=' . $wp_rewrite->preg_index(1));
 			$wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
 		}
-		// add_action('init', 'RCT12_stt2_flush_rewrite_rules');
-		function RCT12_stt2_flush_rewrite_rules()
+		// add_action('init', 'KRS_STG_stt2_flush_rewrite_rules');
+		function KRS_STG_stt2_flush_rewrite_rules()
 		{
 			global $wp_rewrite;
 			$wp_rewrite->flush_rules();
 		}
-		add_action('parse_request', 'RCT12_stt2_filter_search_query');
-		function RCT12_stt2_filter_search_query()
+		add_action('parse_request', 'KRS_STG_stt2_filter_search_query');
+		function KRS_STG_stt2_filter_search_query()
 		{
 			global $wp;
 			if (!empty($wp->query_vars['s'])) {
@@ -1988,4 +1988,5 @@ function RCT12_stt2_admin_print_header()
 		 * add widgets
 		 **/
 		include_once('widget.php');
+		include_once('addons.php');
 ?>
